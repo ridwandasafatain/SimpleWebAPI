@@ -13,16 +13,8 @@ namespace Web.Service
 
         public void DeleteCustomer(int id)
         {
-            try
-            {
-                var result = _customerRepository.GetCustomerByID(id)!;
-                _customerRepository.Delete(result);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            
+            var result = _customerRepository.GetCustomerByID(id)!;
+            _customerRepository.Delete(result);            
         }
 
         public CustomerDTO? GetCustomerByCode(string code)
@@ -50,43 +42,26 @@ namespace Web.Service
 
         public void InsertCustomer(CustomerDTO customer)
         {
-            try
+            var newCustomer = new Customer()
             {
-                var newCustomer = new Customer()
-                {
-                    CustomerCode = customer.CustomerCode,
-                    CustomerName = customer.CustomerName,
-                    CustomerAddress = customer.CustomerAddress,
-                    CreatedBy = customer.CreatedBy,
-                };
+                CustomerCode = customer.CustomerCode,
+                CustomerName = customer.CustomerName,
+                CustomerAddress = customer.CustomerAddress,
+                CreatedBy = customer.CreatedBy,
+            };
 
-                _customerRepository.Add(newCustomer);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            _customerRepository.Add(newCustomer);            
         }
 
         public void UpdateCustomer(CustomerDTO customer)
-        {
-            try
-            {
-                var result = _customerRepository.GetCustomerByID(customer.CustomerId)!;
-                result.CustomerCode = customer.CustomerCode;
-                result.CustomerName = customer.CustomerName;
-                result.CustomerAddress = customer.CustomerAddress;
-                result.ModifiedBy = customer.ModifiedBy;
+        {            
+            var result = _customerRepository.GetCustomerByID(customer.CustomerId)!;
+            result.CustomerCode = customer.CustomerCode;
+            result.CustomerName = customer.CustomerName;
+            result.CustomerAddress = customer.CustomerAddress;
+            result.ModifiedBy = customer.ModifiedBy;
 
-                _customerRepository.Update(result);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            
+            _customerRepository.Update(result);                     
         }
     }
 }

@@ -1,0 +1,11 @@
+﻿CREATE TABLE [dbo].[Customer] (
+[CustomerId] INT IDENTITY (1, 1) NOT NULL,
+[CustomerCode] VARCHAR (50) NOT NULL,
+[CustomerName] VARCHAR (255) NOT NULL,
+[CustomerAddress] VARCHAR (MAX) CONSTRAINT [DF_Customer_Customer_Address] DEFAULT ('') NOT NULL,
+[CreatedBy] INT NOT NULL,
+[CreatedAt] DATETIME NOT NULL,
+[ModifiedBy] INT NULL,
+[ModifiedAt] DATETIME NULL,
+CONSTRAINT [PK_CUSTOMER] PRIMARY KEY CLUSTERED ([CustomerId] ASC)
+);

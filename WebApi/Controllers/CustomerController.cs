@@ -16,52 +16,118 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("all")]
-        public IEnumerable<CustomerDTO> GetAll()
+        public IEnumerable<CustomerResponse> GetAll()
         {
-            return _customerService.GetCustomers();
+            return _customerService.GetCustomers().Select(a => new CustomerResponse(a));
         }
 
         [HttpGet("id/{id}")]
-        public CustomerDTO GetByID(int id)
+        public Response GetByID(int id)
         {
-            var result = _customerService.GetCustomerByID(id);
-            return result == null ? new CustomerDTO() : result;
+            var res = new Response();
+            try
+            {
+                var result = _customerService.GetCustomerByID(id);
+                if (result != null)
+                {
+                    res.Data = new CustomerResponse(result);
+                }
+                else
+                {
+                    res.Message = $"Data dengan id {id} tidak ditemukan"; 
+                }
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Message = ex.Message;
+                return res;
+            }           
         }
 
         [HttpGet("code/{code}")]
-        public CustomerDTO GetByCode(string code)
+        public Response GetByCode(string code)
         {
-            var result = _customerService.GetCustomerByCode(code);
-            return result == null ? new CustomerDTO() : result;
+            var res = new Response();
+            try
+            {
+                var result = _customerService.GetCustomerByCode(code);
+                if (result != null)
+                {
+                    res.Data = new CustomerResponse(result);
+                }
+                else
+                {
+                    res.Message = $"Data dengan code {code} tidak ditemukan";
+                }
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Message = ex.Message;
+                return res;
+            }            
         }
 
         [HttpGet("name/{name}")]
-        public CustomerDTO GetByName(string name)
+        public Response GetByName(string name)
         {
-            var result = _customerService.GetCustomerByName(name);
-            return result == null ? new CustomerDTO() : result;
+            var res = new Response();
+            try
+            {
+                var result = _customerService.GetCustomerByName(name);
+                if(result != null)
+                {
+                    res.Data = new CustomerResponse(result);
+                }
+                else
+                {
+                    res.Message = $"Data dengan nama {name} tidak ditemukan";
+                }
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Message = ex.Message;
+                return res;
+            }            
         }
 
         [HttpPost]
-        public IActionResult Insert(CustomerDTO customer)
+        public IActionResult Insert(InsertCustomerRequest customer)
         {
-            _customerService.InsertCustomer(customer);
-            return CreatedAtAction("Get", new { id = customer.CustomerId }, customer);
+            try
+            {
+                _customerService.InsertCustomer(new CustomerDTO(customer));
+                return Ok("Data berhasil ditambahkan");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpPut]
-        public IActionResult Update(CustomerDTO customer)
+        public IActionResult Update(UpdateCustomerRequest customer)
         {
-            var result = _customerService.GetCustomerByID(customer.CustomerId);
-            if(result == null)
+            try
             {
-                return BadRequest("Data tidak ditemukan");
+                var result = _customerService.GetCustomerByID(customer.CustomerId);
+                if (result == null)
+                {
+                    return BadRequest("Data tidak ditemukan");
+                }
+                else
+                {
+                    _customerService.UpdateCustomer(new CustomerDTO(customer));
+                    return Ok("Data berhasil diupdate");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _customerService.UpdateCustomer(customer);
-                return Ok(customer);
-            }
+                return BadRequest(ex.Message);
+            }            
         }
 
         [HttpDelete("{id}")]
