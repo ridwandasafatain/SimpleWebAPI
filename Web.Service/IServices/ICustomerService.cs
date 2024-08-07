@@ -10,6 +10,6 @@ namespace Web.Service
         CustomerDTO? GetCustomerByID(int id);
         CustomerDTO? GetCustomerByCode(string code);
         CustomerDTO? GetCustomerByName(string name);
-        IQueryable<CustomerDTO> GetCustomers();
+        IList<CustomerDTO> GetCustomers();
     }
 }

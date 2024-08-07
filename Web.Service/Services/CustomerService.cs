@@ -35,9 +35,9 @@ namespace Web.Service
             return result == null ? null : new CustomerDTO(result);
         }
 
-        public IQueryable<CustomerDTO> GetCustomers()
+        public IList<CustomerDTO> GetCustomers()
         {
-            return _customerRepository.GetQueryable().Select(a => new CustomerDTO(a));
+            return _customerRepository.GetQueryable().Select(a => new CustomerDTO(a)).ToList();
         }
 
         public void InsertCustomer(CustomerDTO customer)
